@@ -18,11 +18,25 @@ type ToDo struct {
 	Body      *string `json:"body"`
 }
 
+type Data struct {
+	Todos []ToDo `json:"todos"`
+}
+
+type Response struct {
+	Status  string `json:"status"`
+	Results int    `json:"results"`
+	Data    Data   `json:"data"`
+}
+
 func main() {
 
-	err := godotenv.Load()
-	if err != nil {
-		fmt.Println("Error loading .env file")
+	//in our production we won't have a environment file (this is dependent on how i deploy I think)
+	//so if it does not exist, grab it from environment variables
+	if os.Getenv("ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			fmt.Println("Error loading .env file")
+		}
 	}
 
 	//pgx handles pghost and pgadatabase postgres components
@@ -43,6 +57,12 @@ func main() {
 
 	app := fiber.New()
 
+	//not needed once deplyoed because react app and backend will be on same port (3006 for example)
+	/* app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173",
+		AllowHeaders: "Origin,Content-Type,Accept",
+	})) */
+
 	//app.Get("/api/todos",getTodos)
 	//app.Post("/api/todos",createTodo)
 	//app.Patch("/api/todos/:id",updateTodo)
@@ -60,7 +80,7 @@ func main() {
 				os.Exit(1)
 			}*/
 
-		rows, err := dbpool.Query(context.Background(), "SELECT * FROM Todo")
+		rows, err := dbpool.Query(context.Background(), "SELECT * FROM Todo ORDER BY id DESC;")
 
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Pool Connection failed: %v\n", err)
@@ -82,7 +102,13 @@ func main() {
 			fmt.Printf(" id: %d \n body: %s \n completed: %t \n", todo.ID, todo.Body, todo.Completed)
 			todos = append(todos, todo)
 		}
-		return c.JSON(todos)
+
+		response := Response{
+			Status:  "success",
+			Results: len(todos),
+			Data:    Data{Todos: todos},
+		}
+		return c.Status(201).JSON(response)
 	})
 
 	app.Post("/api/todos", func(c *fiber.Ctx) error {
@@ -189,6 +215,10 @@ func main() {
 	if port == "" {
 		port = "3003"
 	}
+	if os.Getenv("ENV") == "production" {
+		app.Static("/", "./client/dist")
+	}
+
 	log.Fatal(app.Listen(":" + port))
 
 	/*
