@@ -71,16 +71,6 @@ jobs:
       run: |
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
-    - name: Show full frontend deployment YAML
-      run: cat client/k8s/frontend-deployment.yaml
-
-    - name: Show directory tree
-      run: |
-        echo "Current working directory:"
-        pwd
-        echo "Directory structure:"
-        find . -type f
-
     - name: Deploy frontend to EKS
       run: |
           echo "Replacing with image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}"
@@ -88,7 +78,7 @@ jobs:
           echo "Before:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
 
-          sed -i.bak "s|image: .*|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
+          sed -i "s|image: .*|image: $ECR_FRONTEND_REPO:$SHORT_SHA|g"client/k8s/frontend-deployment.yaml
 
           echo "After:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
@@ -98,5 +88,5 @@ jobs:
 
     - name: Deploy backend to EKS
       run: |
-        sed -i "s|.*image: .*|          image: $ECR_BACKEND_REPO:$SHORT_SHA|" server/k8s/backend-deployment.yaml
+        sed -i "s|image: .*|image: $ECR_BACKEND_REPO:$SHORT_SHA|g"server/k8s/backend-deployment.yaml
         kubectl apply -f server/k8s/backend-deployment.yaml
