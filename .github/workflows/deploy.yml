@@ -73,7 +73,7 @@ jobs:
 
     - name: Debug Print updated frontend manifest
       run: cat client/k8s/frontend-deployment.yaml
-
+      run: echo "Replacing with image ${ECR_FRONTEND_REPO}:${SHORT_SHA}"
     - name: Deploy frontend to EKS
       run: |
         sed -i "s#image: .*#image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}#g" client/k8s/frontend-deployment.yaml
