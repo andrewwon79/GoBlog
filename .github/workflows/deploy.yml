@@ -71,6 +71,10 @@ jobs:
       run: |
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
+    - name: Show full frontend deployment YAML
+      run: cat client/k8s/frontend-deployment.yaml
+
+
     - name: Deploy frontend to EKS
       run: |
         echo "Replacing with image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}"
