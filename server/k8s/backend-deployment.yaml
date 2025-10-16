@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goblog-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          #image: andrewwon79/goblog-backend:1.0
+          #to test locally on kubernetes I want the above, this is what I'm pulling from docker hub, but below is what we want to pull from our ECR URI
+          #with the github actions ci/cd pipeline, this iamge will be overwritten because we are using a dynamic tag for every image created
+          image: 616526550235.dkr.ecr.us-east-2.amazonaws.com/goblog_backend:latest
+          ports:
+            - containerPort: 3003
+          envFrom:
+          - configMapRef:
+              name: goblog-config
+          - secretRef:
+              name: goblog-secret

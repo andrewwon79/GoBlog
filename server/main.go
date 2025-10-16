@@ -99,7 +99,7 @@ func main() {
 				return err
 			}
 			//we don't need to dereference here because fmt.printf AUTOMATICALLY DEREFERENCES!!!
-			fmt.Printf(" id: %d \n body: %s \n completed: %t \n", todo.ID, todo.Body, todo.Completed)
+			fmt.Printf(" id: %d \n body: %v \n completed: %v \n", todo.ID, todo.Body, todo.Completed)
 			todos = append(todos, todo)
 		}
 
@@ -215,9 +215,16 @@ func main() {
 	if port == "" {
 		port = "3003"
 	}
-	if os.Getenv("ENV") == "production" {
+	//we only need this is we're serving a static file(it was used when I was using 1 dockerfile for both frontend and backend)
+	//however we're going to splitup frontend and backend into seperate docker images meaning and host on kubernetes
+	//this means we're going to use nginx.conf to grab the static file
+	/* if os.Getenv("ENV") == "production" {
 		app.Static("/", "./client/dist")
-	}
+		// Serve index.html for root path
+		app.Get("/", func(c *fiber.Ctx) error {
+			return c.SendFile("./client/dist/index.html")
+		})
+	} */
 
 	log.Fatal(app.Listen(":" + port))
 

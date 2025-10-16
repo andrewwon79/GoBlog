@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: goblog-config
+data:
+  PORT: "3003"
+  ENV: "production"
+  PGUSER: "postgres"
+  PGHOST: "postgres"
+  PGDATABASE: "goblog"
+  POSTGRES_DB: "goblog"   #used by postgres itself to create our table, not for connecting to it, postgres will name this database goblog
+  PGPORT: "5432"
+  VITE_API_URL: "http://backend:3003"

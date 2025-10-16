@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: goblog-config
+data:
+  PORT: "3003"
+  ENV: "production"
+  PGUSER: "postgres"
+  PGHOST: "postgres"
+  PGDATABASE: "goblog"
+  PGPORT: "5432"

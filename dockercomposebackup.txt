@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      ENV: production
+      PGUSER: postgres
+      PGHOST: postgres
+      PGPASSWORD: {password goes here}
+      PGDATABASE: goblog
+      PGPORT: 5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: {password goes here}
+      POSTGRES_DB: goblog
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:

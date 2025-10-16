@@ -22,9 +22,9 @@ export interface TodoItemProps {
 }
 
 
-const TodoItem: React.FC<TodoItemProps> = ({ index,item }) => {
+const TodoItem: React.FC<TodoItemProps> = ({ item }) => {
 	const [isUpdating, setIsUpdating] = useState<boolean>(false);
-	const {todos, setTodos} = useContext(BlogContext);
+	const {setTodos} = useContext(BlogContext);
 	const [isDeleting, setIsDeleting] = useState<boolean>(false); 
 
 	const updateToDo = async (e: React.FormEvent,id: number) => {

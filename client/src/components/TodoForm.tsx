@@ -13,6 +13,7 @@ import { BlogContext } from "./context/BlogContext";
     const createTodo = async (e: React.FormEvent) => {
         e.preventDefault();
         try{
+            setIsPending(true);
             const response = await BlogURL.post("/",{
                 /** the name,location, and price_range is what our backend expects data to be coming in, if we want to send in 4, its going to be price_range=4 */
                 /** javascript short hand is that, if what state we're passing in matches what  */
@@ -22,6 +23,8 @@ import { BlogContext } from "./context/BlogContext";
             setBody(""); // ✅ Clear the input field
         }catch(err){
             console.error("Error creating todo:", err);
+        }finally{
+            setIsPending(false);
         }
     }
 

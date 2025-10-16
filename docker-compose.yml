@@ -1,0 +1,43 @@
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./client
+      args:
+        VITE_API_URL: "http://backend:3003"   #this is a special case because vite reads these environment variables at buildtime and not runtime, need to put here and client dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+  backend:
+    build: ./server
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      ENV: production
+      PGUSER: postgres
+      PGHOST: postgres
+      PGPASSWORD: {password goes here}
+      PGDATABASE: goblog
+      PGPORT: 5432
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: {password goes here}
+      POSTGRES_DB: goblog
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
