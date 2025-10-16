@@ -78,7 +78,7 @@ jobs:
           echo "Before:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
 
-          sed -i "s|image: .*|image: $ECR_FRONTEND_REPO:$SHORT_SHA|g"client/k8s/frontend-deployment.yaml
+          sed -i "s|image: .*|image: $ECR_FRONTEND_REPO:$SHORT_SHA|g" client/k8s/frontend-deployment.yaml
 
           echo "After:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
@@ -88,5 +88,5 @@ jobs:
 
     - name: Deploy backend to EKS
       run: |
-        sed -i "s|image: .*|image: $ECR_BACKEND_REPO:$SHORT_SHA|g"server/k8s/backend-deployment.yaml
+        sed -i "s|image: .*|image: $ECR_BACKEND_REPO:$SHORT_SHA|g" server/k8s/backend-deployment.yaml
         kubectl apply -f server/k8s/backend-deployment.yaml
