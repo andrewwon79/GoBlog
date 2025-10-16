@@ -82,7 +82,7 @@ jobs:
           echo "Before:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
 
-          sed -i.bak "s|image: \*\*\*:test|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
+          sed -i.bak -E "s|^\s*image:.*|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
 
           echo "After:"
           grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
