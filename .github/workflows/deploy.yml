@@ -86,12 +86,12 @@ jobs:
           echo "Replacing with image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}"
 
           echo "Before:"
-          grep ''^\s*image:'' client/k8s/frontend-deployment.yaml || echo "No image line found"
+          grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
 
-          sed -i.bak -E "s|^\s*image:.*|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
+          sed -i.bak "s|image: .*|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
 
           echo "After:"
-          grep ''^\s*image:'' client/k8s/frontend-deployment.yaml || echo "No image line found"
+          grep 'image:' client/k8s/frontend-deployment.yaml || echo "No image line found"
 
           kubectl apply -f client/k8s/frontend-deployment.yaml
 
