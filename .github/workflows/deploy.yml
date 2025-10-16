@@ -74,11 +74,19 @@ jobs:
     - name: Debug Print updated frontend manifest
       run: |
         cat client/k8s/frontend-deployment.yaml
-        echo "Replacing with image ${ECR_FRONTEND_REPO}:${SHORT_SHA}"
+        echo "Before:"
+        grep 'image:' client/k8s/frontend-deployment.yaml
+
     - name: Deploy frontend to EKS
       run: |
-        sed -i "s#image: .*#image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}#g" client/k8s/frontend-deployment.yaml
+        sed -i "s|image: \*\*\*|image: ${ECR_FRONTEND_REPO}:${SHORT_SHA}|g" client/k8s/frontend-deployment.yaml
         kubectl apply -f client/k8s/frontend-deployment.yaml
+
+    - name: Debug Print updated frontend manifest after sed
+      run: |
+        echo "After:"
+        grep 'image:' client/k8s/frontend-deployment.yaml
+
 
     - name: Deploy backend to EKS
       run: |
