@@ -38,12 +38,12 @@ jobs:
 
     - name: Build and push frontend to Docker Hub
       run: |
-        docker build -t $DOCKERHUB_USERNAME/goblog-frontend:$SHORT_SHA ./frontend
+        docker build -t $DOCKERHUB_USERNAME/goblog-frontend:$SHORT_SHA ./client
         docker push $DOCKERHUB_USERNAME/goblog-frontend:$SHORT_SHA
 
     - name: Build and push backend to Docker Hub
       run: |
-        docker build -t $DOCKERHUB_USERNAME/goblog-backend:$SHORT_SHA ./backend
+        docker build -t $DOCKERHUB_USERNAME/goblog-backend:$SHORT_SHA ./server
         docker push $DOCKERHUB_USERNAME/goblog-backend:$SHORT_SHA
 
     - name: Configure AWS credentials
