@@ -74,6 +74,12 @@ jobs:
     - name: Show full frontend deployment YAML
       run: cat client/k8s/frontend-deployment.yaml
 
+    - name: Show directory tree
+      run: |
+        echo "Current working directory:"
+        pwd
+        echo "Directory structure:"
+        find . -type f
 
     - name: Deploy frontend to EKS
       run: |
