@@ -76,7 +76,7 @@ jobs:
 
     - name: Deploy frontend to EKS
       run: |
-        sed -i "s|.*image: .*|          image: $ECR_FRONTEND_REPO:$SHORT_SHA|" client/k8s/frontend-deployment.yaml
+        sed -i "s|image: .*|image: $ECR_FRONTEND_REPO:$SHORT_SHA|g"client/k8s/frontend-deployment.yaml
         kubectl apply -f client/k8s/frontend-deployment.yaml
 
     - name: Deploy backend to EKS
