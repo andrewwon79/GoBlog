@@ -71,7 +71,7 @@ jobs:
       run: |
         aws eks update-kubeconfig --region $AWS_REGION --name $EKS_CLUSTER_NAME
 
-    - name: Debug: Print updated frontend manifest
+    - name: Debug Print updated frontend manifest
       run: cat client/k8s/frontend-deployment.yaml
 
     - name: Deploy frontend to EKS
