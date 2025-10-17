@@ -45,7 +45,7 @@ const TodoList = () => {
                 gradientVia="#0b85f8"
                 gradientTo="#0b85f8"
 			>				
-            Today's Tasks
+            Andrew's Tasks
 			</Text>
 			{isLoading && (
 				<Flex justifyContent={"center"} my={4}>
